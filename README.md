@@ -1,14 +1,17 @@
 # E-Commerce API
 
-Overview
+## Overview
+
 The E-Commerce API is a RESTful API developed using Flask and MySQL. It provides a backend for managing products, users, and orders in an e-commerce application. The API supports user registration and authentication, product management, and order processing.
 
-Features
+## Features
+
 User Management: Register new users, log in, and manage user accounts.
 Product Management: Add, update, delete, and list products.
 Order Management: Create, update, delete, and list orders.
 JWT Authentication: Secure endpoints with JSON Web Token (JWT) authentication.
 Error Handling: Comprehensive error handling for various scenarios.
+
 Prerequisites
 Python 3.8 or later
 MySQL Server
