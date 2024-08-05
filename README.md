@@ -33,7 +33,7 @@ Create a .env file in the root directory with the following content:
 
 ini
 Copy code
-SECRET_KEY=your_secret_key
+SECRET_KEY=hillaarts
 DATABASE_URI=mysql+mysqlconnector://hillaarts:password@localhost/ecommerce_db
 JWT_SECRET_KEY=your_jwt_secret_key
 Replace your_secret_key, username, password, and your_jwt_secret_key with your actual values.
