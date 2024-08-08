@@ -2,7 +2,7 @@ from flask import Flask
 from flask_sqlalchemy import SQLAlchemy
 from flask_jwt_extended import JWTManager
 from flask_cors import CORS
-from app.config import Config
+from config import Config
 from app.models import db
 from app.errors import register_error_handlers
 from app.routes import bp
