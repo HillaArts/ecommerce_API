@@ -3,7 +3,7 @@ from flask_sqlalchemy import SQLAlchemy
 from flask_jwt_extended import JWTManager
 from flask_cors import CORS
 # from app.models import db
-from app.extensions import db
+from app.extensions import db, migrate
 from app.errors import register_error_handlers
 from app.routes import register_blueprints
 from app.docs import setup_swagger
@@ -18,6 +18,7 @@ def create_app(config_class=DevelopmentConfig):
     app.config.from_object(config_class)
 
     db.init_app(app)
+    migrate.init_app(app, db)
     jwt.init_app(app)
     CORS(app, resources={r"/*": {"origins": "*"}})
 
