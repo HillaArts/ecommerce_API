@@ -3,9 +3,9 @@ from app.models.user import User
 from app.extensions import db, jwt
 from flask_jwt_extended import create_access_token
 
-bp = Blueprint('auth', __name__, url_prefix='/auth')
+auth_bp = Blueprint('auth', __name__, url_prefix='/auth')
 
-@bp.route('/register', methods=['POST'])
+@auth_bp.route('/register', methods=['POST'])
 def register():
     data = request.get_json()
     username = data.get('username')
@@ -22,7 +22,7 @@ def register():
 
     return jsonify({"message": "User created successfully"}), 201
 
-@bp.route('/login', methods=['POST'])
+@auth_bp.route('/login', methods=['POST'])
 def login():
     data = request.get_json()
     email = data.get('email')
