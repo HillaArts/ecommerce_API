@@ -9,7 +9,6 @@ from app.docs import setup_swagger
 from app.config import DevelopmentConfig, TestingConfig, ProductionConfig
 # from app.routes.auth import auth_bp
 
-
 jwt = JWTManager()
 
 def create_app(config_class=DevelopmentConfig):
