@@ -1,5 +1,7 @@
 from flask import Blueprint, request, jsonify
 from app.models.order import Order
+from app.models.orderproduct import OrderProduct
+from app.models.product import Product  
 from app.extensions import db
 from flask_jwt_extended import jwt_required, get_jwt_identity
 
@@ -17,9 +19,25 @@ def manage_orders():
     elif request.method == 'POST':
         data = request.get_json()
         total_price = data.get('total_price')
+        products_data = data.get('products')
 
         order = Order(user_id=user_id, total_price=total_price)
         db.session.add(order)
+        db.session.commit()
+
+        for product_data in products_data:
+            product_id = product_data['product_id']
+            quantity = product_data['quantity']
+            product = Product.query.get(product_id)
+            if product:
+                order_product = OrderProduct(
+                    order_id=order.id,
+                    product_id=product.id,
+                    quantity=quantity,
+                    price_at_order=product.price
+                )
+                db.session.add(order_product)
+
         db.session.commit()
 
         return jsonify({"message": "Order created successfully"}), 201
