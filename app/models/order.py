@@ -8,6 +8,7 @@ class Order(db.Model):
     created_at = db.Column(db.DateTime, default=datetime.utcnow)
     status = db.Column(db.String(20), default='Pending')
     user = db.relationship('User', backref=db.backref('orders', lazy=True))
+    products = db.relationship('OrderProduct', backref='order', lazy=True)
 
     def to_dict(self):
         return {
@@ -16,4 +17,5 @@ class Order(db.Model):
             'total_price': self.total_price,
             'created_at': self.created_at.isoformat(),
             'status': self.status,
+            'products': [op.to_dict() for op in self.products]
         }
