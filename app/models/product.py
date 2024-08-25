@@ -9,8 +9,8 @@ class Product(db.Model):
     stock = db.Column(db.Integer, default=0)
     created_at = db.Column(db.DateTime, default=datetime.utcnow)
     
-    # Relationships
-    order_products = db.relationship('OrderProduct', backref='product', lazy=True)
+    # Relationships with a descriptive backref
+    order_products = db.relationship('OrderProduct', backref='associated_product', lazy=True)
 
     def to_dict(self):
         return {

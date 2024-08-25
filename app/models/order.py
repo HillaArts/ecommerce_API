@@ -8,9 +8,9 @@ class Order(db.Model):
     created_at = db.Column(db.DateTime, default=datetime.utcnow)
     status = db.Column(db.String(20), default='Pending')
     
-    # Relationships
-    user = db.relationship('User', backref=db.backref('orders', lazy=True))
-    order_products = db.relationship('OrderProduct', backref='order', lazy=True)
+    # Relationships with descriptive backref names
+    user = db.relationship('User', backref=db.backref('user_orders', lazy=True))
+    order_products = db.relationship('OrderProduct', backref='associated_order', lazy=True)
 
     def to_dict(self):
         return {
