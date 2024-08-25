@@ -1,4 +1,5 @@
 from datetime import datetime
+import pytz
 from sqlalchemy.orm import column_property
 from sqlalchemy import select, func
 from app.extensions import db
@@ -7,7 +8,7 @@ from app.models.orderproduct import OrderProduct
 class Order(db.Model):
     id = db.Column(db.Integer, primary_key=True)
     user_id = db.Column(db.Integer, db.ForeignKey('user.id'), nullable=False)
-    created_at = db.Column(db.DateTime, default=datetime.utcnow)
+    created_at = db.Column(db.DateTime, default=lambda: datetime.now(pytz.timezone('Africa/Nairobi')))
     status = db.Column(db.String(20), default='Pending')
     
     # Relationships with descriptive backref names
