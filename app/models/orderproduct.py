@@ -7,8 +7,8 @@ class OrderProduct(db.Model):
     price_at_order = db.Column(db.Float, nullable=False)
     
     # Relationships with descriptive backrefs
-    order = db.relationship('Order', backref=db.backref('order_items', lazy=True))
-    product = db.relationship('Product', backref=db.backref('associated_orders', lazy=True))
+    order = db.relationship('Order', backref=db.backref('order_items', lazy=True), overlaps="order_products,order")
+    product = db.relationship('Product', backref=db.backref('associated_orders', lazy=True), overlaps="order_products,product")
 
     def to_dict(self):
         return {
