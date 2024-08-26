@@ -1,4 +1,4 @@
-This project is a simple ecommerce API built using Flask and MySQL, which provides endpoints for user management, product management, and order management. The API supports both admin and client roles with JWT-based authentication and authorization.
+# This project is a simple ecommerce API built using Flask and MySQL, which provides endpoints for user management, product management, and order management. The API supports both admin and client roles with JWT-based authentication and authorization
 
 Table of Contents
 Features
@@ -27,7 +27,7 @@ Clone the repository:
 
 bash
 Copy code
-git clone https://github.com/HillaArts/ecommerce-api.git
+git clone <https://github.com/HillaArts/ecommerce-api.git>
 cd ecommerce-api
 Create a virtual environment and activate it:
 
@@ -52,7 +52,7 @@ Run the application:
 bash
 Copy code
 flask run
-The API will be available at http://localhost:5000.
+The API will be available at <http://localhost:5000>.
 
 API Endpoints
 Authentication Endpoints
@@ -152,6 +152,6 @@ bash
 Copy code
 heroku config:set FLASK_APP=run.py
 heroku config:set FLASK_ENV=production
-Access your application at https://your-app-name.herokuapp.com.
+Access your application at <https://your-app-name.herokuapp.com>.
 
-This README provides a detailed overview of the project, instructions for setup, and an outline of the available API endpoints based on the Swagger specification. 
+This README provides a detailed overview of the project, instructions for setup, and an outline of the available API endpoints based on the Swagger specification.
