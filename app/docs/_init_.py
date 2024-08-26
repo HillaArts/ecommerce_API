@@ -2,7 +2,9 @@ from flasgger import Swagger
 
 def setup_swagger(app):
     """
-    Setup Swagger UI for the Flask application.
+    Set up Swagger UI for the Flask application.
+    
+    Args:
+        app (Flask): The Flask application instance.
     """
     Swagger(app, template_file='app/static/swagger.yaml')
-
