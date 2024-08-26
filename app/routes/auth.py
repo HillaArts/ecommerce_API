@@ -1,9 +1,9 @@
 from flask import Blueprint, request, jsonify
-from flask_cors import CORS  # Import CORS
+from flask_cors import CORS
 from app.models.order import Order
 from app.models.user import User
 from app.extensions import db, jwt
-from flask_jwt_extended import create_access_token,  jwt_required, get_jwt_identity
+from flask_jwt_extended import create_access_token, jwt_required, get_jwt_identity
 from app.decorators import admin_required, client_required
 
 auth_bp = Blueprint('auth', __name__, url_prefix='/auth')
@@ -13,6 +13,12 @@ CORS(auth_bp)
 
 @auth_bp.route('/register', methods=['POST'])
 def register():
+    """
+    Register a new user.
+    
+    Returns:
+        JSON response with a success message or an error message.
+    """
     data = request.get_json()
     username = data.get('username')
     email = data.get('email')
@@ -30,6 +36,12 @@ def register():
 
 @auth_bp.route('/register/admin', methods=['POST'])
 def register_admin():
+    """
+    Register a new admin user.
+    
+    Returns:
+        JSON response with a success message or an error message.
+    """
     data = request.get_json()
     username = data.get('username')
     email = data.get('email')
@@ -47,6 +59,12 @@ def register_admin():
 
 @auth_bp.route('/register/client', methods=['POST'])
 def register_client():
+    """
+    Register a new client user.
+    
+    Returns:
+        JSON response with a success message or an error message.
+    """
     data = request.get_json()
     username = data.get('username')
     email = data.get('email')
@@ -64,6 +82,12 @@ def register_client():
 
 @auth_bp.route('/login', methods=['POST'])
 def login():
+    """
+    Log in a user.
+    
+    Returns:
+        JSON response with an access token or an error message.
+    """
     data = request.get_json()
     email = data.get('email')
     password = data.get('password')
@@ -77,6 +101,12 @@ def login():
 
 @auth_bp.route('/login/admin', methods=['POST'])
 def login_admin():
+    """
+    Log in an admin user.
+    
+    Returns:
+        JSON response with an access token or an error message.
+    """
     data = request.get_json()
     email = data.get('email')
     password = data.get('password')
@@ -93,6 +123,12 @@ def login_admin():
 
 @auth_bp.route('/login/client', methods=['POST'])
 def login_client():
+    """
+    Log in a client user.
+    
+    Returns:
+        JSON response with an access token or an error message.
+    """
     data = request.get_json()
     email = data.get('email')
     password = data.get('password')
@@ -107,12 +143,19 @@ def login_client():
     access_token = create_access_token(identity={'id': user.id, 'username': user.username})
     return jsonify(access_token=access_token), 200
 
-from app.decorators import admin_required  # Import the admin_required decorator
-
 @auth_bp.route('/delete/admin/<int:user_id>', methods=['DELETE'])
 @jwt_required()
 @admin_required
 def delete_admin(user_id):
+    """
+    Delete an admin user.
+    
+    Args:
+        user_id (int): The ID of the user to delete.
+    
+    Returns:
+        JSON response with a success message or an error message.
+    """
     current_user = get_jwt_identity()
 
     # Logging the current user and the user to delete for debugging
@@ -133,7 +176,6 @@ def delete_admin(user_id):
     if user_to_delete.id is None:
         return jsonify({"error": "User ID is null, cannot delete"}), 400
 
-
     try:
         # Delete the user
         db.session.delete(user_to_delete)
@@ -143,11 +185,19 @@ def delete_admin(user_id):
         db.session.rollback()  # Rollback in case of any errors
         return jsonify({"error": str(e)}), 500
 
-
 @auth_bp.route('/delete/client/<int:user_id>', methods=['DELETE'])
 @jwt_required()
 @admin_required
 def delete_client(user_id):
+    """
+    Delete a client user.
+    
+    Args:
+        user_id (int): The ID of the user to delete.
+    
+    Returns:
+        JSON response with a success message or an error message.
+    """
     # Log user ID for debugging
     print(f"Attempting to delete client with user_id: {user_id}")
 
@@ -174,11 +224,16 @@ def delete_client(user_id):
         print(f"Error occurred: {e}")
         return jsonify({"error": "An error occurred while deleting the user"}), 500
 
-
 @auth_bp.route('/users/admin', methods=['GET'])
 @jwt_required()
 @admin_required
 def list_admin_users():
+    """
+    List all admin users.
+    
+    Returns:
+        JSON response with a list of admin users.
+    """
     identity = get_jwt_identity()
     current_user = User.query.get(identity['id'])
     if current_user.role != 'admin':
@@ -199,6 +254,12 @@ def list_admin_users():
 @jwt_required()
 @admin_required
 def list_client_users():
+    """
+    List all client users.
+    
+    Returns:
+        JSON response with a list of client users.
+    """
     identity = get_jwt_identity()
     current_user = User.query.get(identity['id'])
     if current_user.role != 'admin':
