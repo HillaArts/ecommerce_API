@@ -10,6 +10,12 @@ bp = Blueprint('product', __name__, url_prefix='/products')
 @jwt_required()
 @admin_required
 def manage_products():
+    """
+    Handle the creation and retrieval of products.
+    
+    Returns:
+        JSON response with the list of products or a success message.
+    """
     if request.method == 'GET':
         products = Product.query.all()
         return jsonify([product.to_dict() for product in products]), 200
@@ -31,6 +37,15 @@ def manage_products():
 @jwt_required()
 @admin_required
 def product_detail(product_id):
+    """
+    Handle the retrieval, update, and deletion of a specific product.
+    
+    Args:
+        product_id (int): The ID of the product to retrieve, update, or delete.
+    
+    Returns:
+        JSON response with the product details, a success message, or an error message.
+    """
     product = Product.query.get_or_404(product_id)
     
     if request.method == 'GET':
