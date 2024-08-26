@@ -13,7 +13,7 @@ class Order(db.Model):
     
     # Relationships with descriptive backref names
     user = db.relationship('User', backref=db.backref('user_orders', lazy=True))
-    order_products = db.relationship('OrderProduct', backref='associated_order', lazy=True, overlaps="order_items,order")
+    order_products = db.relationship('OrderProduct', backref='associated_order', cascade="all, delete-orphan", lazy=True)
 
     # Calculate total price dynamically
     total_price = column_property(

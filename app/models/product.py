@@ -11,7 +11,7 @@ class Product(db.Model):
     created_at = db.Column(db.DateTime, default=lambda: datetime.now(pytz.timezone('Africa/Nairobi')))
     
     # Relationships with a descriptive backref
-    order_products = db.relationship('OrderProduct', backref='associated_product', lazy=True, overlaps="associated_orders,product")
+    order_products = db.relationship('OrderProduct', backref='associated_product', lazy=True)
 
     def to_dict(self):
         return {

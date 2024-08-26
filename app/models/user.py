@@ -7,7 +7,7 @@ class User(db.Model):
     username = db.Column(db.String(150), unique=True, nullable=False, index=True)
     email = db.Column(db.String(150), unique=True, nullable=False, index=True)
     password_hash = db.Column(db.String(255), nullable=False)
-    is_admin = db.Column(db.Boolean, default=False)
+    role = db.Column(db.String(20), nullable=False, default='client')  # 'admin' or 'client'
     created_at = db.Column(db.DateTime, default=datetime.utcnow)
 
     def set_password(self, password):
@@ -21,6 +21,6 @@ class User(db.Model):
             'id': self.id,
             'username': self.username,
             'email': self.email,
-            'is_admin': self.is_admin,
+            'role': self.role,
             'created_at': self.created_at.isoformat(),
         }

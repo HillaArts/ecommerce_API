@@ -2,11 +2,13 @@ from flask import Blueprint, request, jsonify
 from app.models.product import Product
 from app.extensions import db
 from flask_jwt_extended import jwt_required
+from app.decorators import admin_required
 
 bp = Blueprint('product', __name__, url_prefix='/products')
 
 @bp.route('/', methods=['GET', 'POST'])
 @jwt_required()
+@admin_required
 def manage_products():
     if request.method == 'GET':
         products = Product.query.all()
@@ -27,6 +29,7 @@ def manage_products():
 
 @bp.route('/<int:product_id>', methods=['GET', 'PUT', 'DELETE'])
 @jwt_required()
+@admin_required
 def product_detail(product_id):
     product = Product.query.get_or_404(product_id)
     

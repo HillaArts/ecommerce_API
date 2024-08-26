@@ -4,11 +4,13 @@ from app.models.orderproduct import OrderProduct
 from app.models.product import Product  
 from app.extensions import db
 from flask_jwt_extended import jwt_required, get_jwt_identity
+from app.decorators import client_required
 
 bp = Blueprint('order', __name__, url_prefix='/orders')
 
 @bp.route('/', methods=['GET', 'POST'])
 @jwt_required()
+@client_required
 def manage_orders():
     user_id = get_jwt_identity()['id']
 
@@ -18,13 +20,13 @@ def manage_orders():
     
     elif request.method == 'POST':
         data = request.get_json()
-        total_price = data.get('total_price')
         products_data = data.get('products')
 
-        order = Order(user_id=user_id, total_price=total_price)
+        order = Order(user_id=user_id)
         db.session.add(order)
         db.session.commit()
 
+        total_price = 0
         for product_data in products_data:
             product_id = product_data['product_id']
             quantity = product_data['quantity']
@@ -37,13 +39,16 @@ def manage_orders():
                     price_at_order=product.price
                 )
                 db.session.add(order_product)
+                total_price += product.price * quantity
 
+        order.total_price = total_price
         db.session.commit()
 
         return jsonify({"message": "Order created successfully"}), 201
 
 @bp.route('/<int:order_id>', methods=['GET', 'PUT', 'DELETE'])
 @jwt_required()
+@client_required
 def order_detail(order_id):
     order = Order.query.get_or_404(order_id)
 
