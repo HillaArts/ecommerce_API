@@ -4,6 +4,15 @@ from flask_jwt_extended import get_jwt_identity, jwt_required
 from app.models.user import User
 
 def admin_required(fn):
+    """
+    Decorator to ensure that the user is an admin.
+    
+    Args:
+        fn (function): The function to be decorated.
+    
+    Returns:
+        function: The wrapped function.
+    """
     @wraps(fn)
     @jwt_required()  # Ensure JWT is required
     def wrapper(*args, **kwargs):
@@ -26,6 +35,15 @@ def admin_required(fn):
     return wrapper
 
 def client_required(fn):
+    """
+    Decorator to ensure that the user is a client.
+    
+    Args:
+        fn (function): The function to be decorated.
+    
+    Returns:
+        function: The wrapped function.
+    """
     @wraps(fn)
     @jwt_required()  # Ensure JWT is required
     def wrapper(*args, **kwargs):
