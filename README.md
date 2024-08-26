@@ -1,141 +1,157 @@
-# E-Commerce API
+This project is a simple ecommerce API built using Flask and MySQL, which provides endpoints for user management, product management, and order management. The API supports both admin and client roles with JWT-based authentication and authorization.
 
-## Overview
-
-The E-Commerce API is a RESTful API developed using Flask and MySQL. It provides a backend for managing products, users, and orders in an e-commerce application. The API supports user registration and authentication, product management, and order processing.
-
-## Features
-
-User Management: Register new users, log in, and manage user accounts.
-Product Management: Add, update, delete, and list products.
-Order Management: Create, update, delete, and list orders.
-JWT Authentication: Secure endpoints with JSON Web Token (JWT) authentication.
-Error Handling: Comprehensive error handling for various scenarios.
-
+Table of Contents
+Features
+Getting Started
+API Endpoints
+Models
+Security
+Technologies
+Development
+Testing
+Deployment
+Features
+User Management: Admin and client user registration, login, and user management.
+Product Management: Create, update, retrieve, and delete products.
+Order Management: Place, retrieve, update, and delete orders.
+JWT Authentication: Secure endpoints with JWT tokens.
+Role-based Access Control: Different endpoints for admin and client users.
+Getting Started
 Prerequisites
-Python 3.8 or later
-MySQL Server
-pip for Python package management
+Python 3.8+
+MySQL database
+Virtualenv or any environment management tool
+Flask and required dependencies
 Installation
-Clone the Repository
+Clone the repository:
+
 bash
 Copy code
-git clone <https://github.com/HillaArts/ecommerce-api.git>
+git clone https://github.com/HillaArts/ecommerce-api.git
 cd ecommerce-api
-Create a Virtual Environment
+Create a virtual environment and activate it:
+
 bash
 Copy code
-python -m venv venv
-source venv/bin/activate  # On Windows: venv\Scripts\activate
-Install Dependencies
+python3 -m venv venv
+source venv/bin/activate  # On Windows use `venv\Scripts\activate`
+Install the required dependencies:
+
 bash
 Copy code
 pip install -r requirements.txt
-Configure Environment Variables
-Create a .env file in the root directory with the following content:
-
-ini
-Copy code
-SECRET_KEY=hillaarts
-DATABASE_URI=mysql+mysqlconnector://hillaarts:password@localhost/ecommerce_db
-JWT_SECRET_KEY=your_jwt_secret_key
-Replace your_secret_key, username, password, and your_jwt_secret_key with your actual values.
-
-Set Up the Database
-Start MySQL Server if it's not running.
-
-Create the Database:
-
-sql
-Copy code
-CREATE DATABASE ecommerce_db;
-Initialize and Migrate the Database:
+Set up the database:
 
 bash
 Copy code
-python manage.py db init
-python manage.py db migrate
-python manage.py db upgrade
-Running the Application
-To start the Flask development server:
+flask db init
+flask db migrate
+flask db upgrade
+Run the application:
 
 bash
 Copy code
-export FLASK_APP=app
-export FLASK_ENV=development
 flask run
-Alternatively, you can use Gunicorn for production:
+The API will be available at http://localhost:5000.
+
+API Endpoints
+Authentication Endpoints
+Register Admin: POST /auth/register/admin
+Register Client: POST /auth/register/client
+Login Admin: POST /auth/login/admin
+Login Client: POST /auth/login/client
+Delete Admin: DELETE /auth/delete/admin/{user_id}
+Delete Client: DELETE /auth/delete/client/{user_id}
+List Admin Users: GET /auth/users/admin
+List Client Users: GET /auth/users/client
+Product Endpoints
+Retrieve All Products: GET /products/
+Create Product: POST /products/
+Get Product Details: GET /products/{product_id}
+Update Product: PUT /products/{product_id}
+Delete Product: DELETE /products/{product_id}
+Order Endpoints
+Retrieve All Orders: GET /orders/
+Place New Order: POST /orders/
+Get Order Details: GET /orders/{order_id}
+Update Order: PUT /orders/{order_id}
+Delete Order: DELETE /orders/{order_id}
+Models
+Product
+yaml
+Copy code
+Product:
+  id: integer
+  name: string
+  description: string
+  price: float
+  stock: integer
+  created_at: datetime
+Order
+yaml
+Copy code
+Order:
+  id: integer
+  user_id: integer
+  total_price: float
+  created_at: datetime
+  status: string
+  products: list of OrderProduct
+OrderProduct
+yaml
+Copy code
+OrderProduct:
+  order_id: integer
+  product_id: integer
+  quantity: integer
+  price_at_order: float
+Security
+The API uses JWT-based authentication. To access secured endpoints, you need to include the JWT token in the Authorization header as follows:
 
 bash
 Copy code
-gunicorn -w 4 -b 0.0.0.0:8000 app:create_app()
-API Endpoints
-User Endpoints
-Register User
+Authorization: Bearer <your_token_here>
+Technologies
+Flask: A lightweight WSGI web application framework.
+MySQL: Relational database management system.
+Flask-JWT-Extended: JWT support for Flask.
+Swagger: API documentation.
+Development
+To run the development server:
 
-POST /register
-Request Body: { "username": "string", "email": "string", "password": "string" }
-Response: 201 Created if successful, 400 Bad Request if user already exists.
-Login
+bash
+Copy code
+flask run
+To create new migrations:
 
-POST /login
-Request Body: { "email": "string", "password": "string" }
-Response: 200 OK with JWT token if successful, 401 Unauthorized if credentials are invalid.
-Product Endpoints
-List Products
-
-GET /products
-Response: 200 OK with a list of products.
-Create Product
-
-POST /products
-Request Body: { "name": "string", "description": "string", "price": number, "stock": number }
-Response: 201 Created if successful.
-Update Product
-
-PUT /products/<product_id>
-Request Body: { "name": "string", "description": "string", "price": number, "stock": number }
-Response: 200 OK if successful.
-Delete Product
-
-DELETE /products/<product_id>
-Response: 200 OK if successful.
-Order Endpoints
-List Orders
-
-GET /orders
-Response: 200 OK with a list of orders for the authenticated user.
-Create Order
-
-POST /orders
-Request Body: { "total_price": number }
-Response: 201 Created if successful.
-Update Order
-
-PUT /orders/<order_id>
-Request Body: { "status": "string" }
-Response: 200 OK if successful.
-Delete Order
-
-DELETE /orders/<order_id>
-Response: 200 OK if successful.
+bash
+Copy code
+flask db migrate -m "Migration message"
+flask db upgrade
 Testing
 To run the tests:
 
 bash
 Copy code
-python -m unittest discover -s tests
+pytest
 Deployment
-For production deployment:
+Deploy on Heroku
+Create a new Heroku app:
 
-Use a WSGI server like Gunicorn or uWSGI.
-Set up a reverse proxy with Nginx or Apache.
-Secure the application with HTTPS.
-Ensure environment variables are set for configuration.
-License
-This project is licensed under the MIT License - see the LICENSE file for details.
+bash
+Copy code
+heroku create your-app-name
+Push the code to Heroku:
 
-Contributing
-If you’d like to contribute to this project, please fork the repository and submit a pull request. For major changes, please open an issue first to discuss what you would like to change.
+bash
+Copy code
+git push heroku main
+Set up environment variables on Heroku:
 
-Replace placeholders like yourusername and your_secret_key with actual values specific to your project setup. Adjust the API endpoints and other sections based on any further modifications you make to the project.
+bash
+Copy code
+heroku config:set FLASK_APP=run.py
+heroku config:set FLASK_ENV=production
+Access your application at https://your-app-name.herokuapp.com.
+
+This README provides a detailed overview of the project, instructions for setup, and an outline of the available API endpoints based on the Swagger specification. 
