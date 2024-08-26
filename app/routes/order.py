@@ -1,7 +1,7 @@
 from flask import Blueprint, request, jsonify
 from app.models.order import Order
 from app.models.orderproduct import OrderProduct
-from app.models.product import Product  
+from app.models.product import Product
 from app.extensions import db
 from flask_jwt_extended import jwt_required, get_jwt_identity
 from app.decorators import client_required
@@ -12,6 +12,12 @@ bp = Blueprint('order', __name__, url_prefix='/orders')
 @jwt_required()
 @client_required
 def manage_orders():
+    """
+    Handle the creation and retrieval of orders for the authenticated user.
+    
+    Returns:
+        JSON response with the list of orders or a success message.
+    """
     user_id = get_jwt_identity()['id']
 
     if request.method == 'GET':
@@ -50,6 +56,15 @@ def manage_orders():
 @jwt_required()
 @client_required
 def order_detail(order_id):
+    """
+    Handle the retrieval, update, and deletion of a specific order.
+    
+    Args:
+        order_id (int): The ID of the order to retrieve, update, or delete.
+    
+    Returns:
+        JSON response with the order details, a success message, or an error message.
+    """
     order = Order.query.get_or_404(order_id)
 
     if request.method == 'GET':
