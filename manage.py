@@ -1,3 +1,7 @@
+"""
+This module runs the Flask application with database migration support.
+"""
+
 from flask import Flask
 from flask_migrate import Migrate
 from app import create_app, db
